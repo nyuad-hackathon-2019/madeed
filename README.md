@@ -1,0 +1,2 @@
+# madeed
+An Arabic Ontology
