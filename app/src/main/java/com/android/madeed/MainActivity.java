@@ -1,6 +1,7 @@
 package com.android.madeed;
 
 import android.app.SearchManager;
+import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MadeedListener {
+
+    public static final String POSITION_MESSAGE= "com.android.madeed.POSITION";
 
     private SearchView searchView;
     private MadeedApp madeedApp;
@@ -129,5 +132,8 @@ public class MainActivity extends AppCompatActivity implements MadeedListener {
 
     public void doSearch(String position) {
         Log.e("Madeed", position);
+        Intent intent = new Intent(this, ShowResults.class);
+        intent.putExtra(POSITION_MESSAGE, position);
+        startActivity(intent);
     }
 }
