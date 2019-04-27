@@ -23,7 +23,7 @@
         android:layout_below="@id/definition"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:id="@+id/translation"
+        android:id="@+id/source"
         android:paddingBottom="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
