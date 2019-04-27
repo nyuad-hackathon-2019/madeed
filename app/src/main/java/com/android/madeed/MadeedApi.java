@@ -34,7 +34,7 @@ class MadeedApi {
             "https://ontology.birzeit.edu/sina/api/Autocomplete/%s?apikey=samplekey&limit=100";
 
     private static final String AUDIO_URL =
-            "https://code.responsivevoice.org/getvoice.php?t=%s&tl=ar&sv=g1&vn=&pitch=0.5&rate=0.5&vol=1&gender=male";
+            "https://code.responsivevoice.org/getvoice.php?t=%s&tl=%s&sv=g1&vn=&pitch=0.5&rate=0.5&vol=1&gender=male";
 
     private static MadeedApi sInstance = null;
 
@@ -108,11 +108,11 @@ class MadeedApi {
         ));
     }
 
-    void texttospeech(final String querytext) {
+    void texttospeech(final String querytext, final String loc) {
         MediaPlayer mp = new MediaPlayer();
         try {
             mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mp.setDataSource(String.format(AUDIO_URL, querytext));
+            mp.setDataSource(String.format(AUDIO_URL, querytext, loc));
             mp.prepareAsync();
             mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
