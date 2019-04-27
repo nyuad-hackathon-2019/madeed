@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.Map;
-
 public class PageAdapter extends FragmentPagerAdapter {
 
     private static final String[] TITLES = new String[] {"Dictionary", "Ontology", "Morphology"};
@@ -16,7 +14,6 @@ public class PageAdapter extends FragmentPagerAdapter {
     public PageAdapter(FragmentManager fm) {
         super(fm);
     }
-
 
     @Override
     public Fragment getItem(int position) {
@@ -28,7 +25,7 @@ public class PageAdapter extends FragmentPagerAdapter {
                 return fragments[0];
             case 1:
                 if (fragments[1] == null) {
-                    fragments[1] =  new Tab2();
+                    fragments[1] =  new OntologyFragment();
                 }
                 return fragments[1];
             case 2:

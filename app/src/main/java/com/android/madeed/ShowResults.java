@@ -19,8 +19,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowResults extends AppCompatActivity implements MadeedListener {
-
+public class ShowResults extends AppCompatActivity {
 
     private ViewPager viewPager;
     private PageAdapter myPagerAdapter;
@@ -29,17 +28,12 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_results);
-
-        setUpViewPager();
-
-
-
-
+        setUpViewPager(getIntent().getStringExtra(MainActivity.POSITION_MESSAGE));
     }
 
-    private void setUpViewPager() {
+    private void setUpViewPager(final String query ) {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-         myPagerAdapter = new PageAdapter(getSupportFragmentManager());
+        myPagerAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -52,6 +46,7 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
 
             }
 
@@ -59,28 +54,6 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition(), true);
             }
-
         });
-    }
-
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.POSITION_MESSAGE);
-        final MadeedApi madeedApi = MadeedApp.getApi(getApplicationContext());
-        madeedApi.define(message, ShowResults.this);
-    }
-
-    @Override
-    public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
-        DictionaryFragment df = (DictionaryFragment) myPagerAdapter.getItem(viewPager.getCurrentItem());
-        df.setData(words);
-    }
-
-    @Override
-    public void onSuggestionLookupComplete(String originalTerm, List<String> words) {
-        Log.e("Madeed", words.toString());
     }
 }
