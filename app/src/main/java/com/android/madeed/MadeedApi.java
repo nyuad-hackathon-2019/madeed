@@ -3,6 +3,7 @@ package com.android.madeed;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.madeed.Word;
@@ -20,9 +21,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.regex.Pattern;
 
 class MadeedApi {
 
@@ -35,6 +39,11 @@ class MadeedApi {
 
     private static final String AUDIO_URL =
             "https://code.responsivevoice.org/getvoice.php?t=%s&tl=%s&sv=g1&vn=&pitch=0.5&rate=0.5&vol=1&gender=male";
+
+    private static final String QUES_URL =
+            "https://nl2sparql.azurewebsites.net/Query?text=%s&queryLanguage=%s&resultLanguage=%s&numberOfResults=%d";
+
+    private static final Integer QUES_NO_OF_RESULTS = 5;
 
     private static MadeedApi sInstance = null;
 
@@ -54,31 +63,86 @@ class MadeedApi {
         return sInstance;
     }
 
-    void define(final String term, final MadeedListener listener) {
-        queue.add(new JsonObjectRequest(
-            String.format(DEF_URL, term),
-            null,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        JSONArray results = response.getJSONArray("content");
-                        List<Word> words = new ArrayList<>();
-                        for (int i = 0; i < results.length(); i++) {
-                            words.add(Word.parseFrom(term, results.getJSONObject(i)));
+
+    public void getAnswer(String question, final AssistantResponseListener listener) {
+        String lang = detectLanguage(question);
+        String asciiEncodedQuestion = "";
+        try {
+            Uri.Builder uriBuilder = new Uri.Builder();
+            uriBuilder.scheme("https")
+                    .authority("https://nl2sparql.azurewebsites.net/")
+                    .appendPath("Query")
+                    .appendQueryParameter("text", question)
+                    .appendQueryParameter("queryLanguage", lang)
+                    .appendQueryParameter("resultLanguage", lang)
+                    .appendQueryParameter("numberOfResults", String.valueOf(QUES_NO_OF_RESULTS));
+            asciiEncodedQuestion = uriBuilder.build().toString();
+        } catch (Exception e) {
+            Log.e("Madeed", "ERROR" + e.toString());
+        }
+        queue.add(new JsonArrayRequest(asciiEncodedQuestion,
+        new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            List<String> answerLabels = new ArrayList<>();
+                            for (int i = 0; i < response.length(); i++) {
+                                try{
+                                    answerLabels.add(response.getJSONObject(i).getString("name"));
+                                } catch (Exception e){
+                                    answerLabels.add(response.getJSONObject(i).getString("message"));
+                                }
+                            }
+                            listener.onQuestionAnswered(answerLabels);
+                        } catch (JSONException e) {
+                            Log.e("Madeed", "ERROR" + e.toString());
                         }
-                        listener.onTermDefinitionComplete(term, words);
-                    } catch (JSONException e) {
-                        Log.e("Madeed", "ERROR", e);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
                     }
                 }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+        ));
+    }
 
+    String detectLanguage(String term) {
+        String pattern = "[\\u0600-\\u06FF\\uFE70-\\uFEFC]";
+        Pattern media = Pattern.compile(pattern);
+        java.util.regex.Matcher m = media.matcher(term);
+        if (m.find())
+            return "ar";
+        else
+            return "en";
+    }
+
+    void define(final String term, final MadeedListener listener) {
+        queue.add(new JsonObjectRequest(
+                String.format(DEF_URL, term),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray results = response.getJSONArray("content");
+                            List<Word> words = new ArrayList<>();
+                            for (int i = 0; i < results.length(); i++) {
+                                words.add(Word.parseFrom(term, results.getJSONObject(i)));
+                            }
+                            listener.onTermDefinitionComplete(term, words);
+                        } catch (JSONException e) {
+                            Log.e("Madeed", "ERROR", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
                 }
-            }
         ));
     }
 
@@ -120,7 +184,7 @@ class MadeedApi {
                     mediaPlayer.start();
                 }
             });
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -129,5 +193,10 @@ class MadeedApi {
 
 interface MadeedListener {
     void onTermDefinitionComplete(String originalTerm, List<Word> words);
+
     void onSuggestionLookupComplete(String originalTerm, List<String> words);
+}
+
+interface AssistantResponseListener {
+    void onQuestionAnswered(List<String> answers);
 }

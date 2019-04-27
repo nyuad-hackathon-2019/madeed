@@ -56,7 +56,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder>
         void bind(Word w) {
             original.setText(w.synSet +  " " + w.definition);
             definition.setText(w.getDefinition());
-            translation.setText(w.getTranslation());
+//            translation.setText(w.getTranslation());
 //            synonyms.setText(w.synonyms.toString());
         }
     }

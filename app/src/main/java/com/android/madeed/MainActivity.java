@@ -38,7 +38,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MadeedListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements MadeedListener,
+        NavigationView.OnNavigationItemSelectedListener,
+        AssistantResponseListener {
 
     public static final String POSITION_MESSAGE= "com.android.madeed.POSITION";
 
@@ -127,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
         viewPager.setAdapter(pageAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablay));
 
+        madeedApi.getAnswer("Person who live in Palestine", MainActivity.this);
     }
 
     @Override
@@ -172,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
             searchView.setQuery(query, false);
             Log.d("Madeed", query);
         }
+    }
+
+    @Override
+    public void onQuestionAnswered(List<String> answers) {
+        Log.e("LABEL", answers.get(0));
     }
 }
 
