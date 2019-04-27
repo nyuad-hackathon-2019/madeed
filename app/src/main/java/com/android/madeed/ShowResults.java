@@ -18,8 +18,13 @@ import java.util.List;
 
 public class ShowResults extends AppCompatActivity implements MadeedListener {
 
+
     private RecyclerView mRecyclerView;
     private ResultsAdapter resultsAdapter;
+
+    private MadeedApp madeedApp;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,7 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
         resultsAdapter.setData(words);
+
     }
 
     @Override
