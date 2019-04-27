@@ -13,10 +13,6 @@
     tools:context="com.android.madeed.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <android.support.v7.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="wrap_content"
