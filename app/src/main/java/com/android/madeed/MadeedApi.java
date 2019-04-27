@@ -83,9 +83,9 @@ class MadeedApi {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray results = response.getJSONArray("content");
-                            List<String> words = new ArrayList<>();
+                            List<Word> words = new ArrayList<>();
                             for (int i = 0; i < results.length(); i++) {
-                                words.add(results.getString(i));
+                                words.add(Word.parseFrom(results.getJSONObject(i)));
                             }
                             listener.onSuggestionLookupComplete(phrase, words);
                         } catch (JSONException e) {
@@ -106,5 +106,5 @@ class MadeedApi {
 
 interface MadeedListener {
     void onTermDefinitionComplete(String originalTerm, List<Word> words);
-    void onSuggestionLookupComplete(String originalTerm, List<String> words);
+    void onSuggestionLookupComplete(String originalTerm, List<Word> words);
 }
