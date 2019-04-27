@@ -29,7 +29,7 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
         String message = intent.getStringExtra(MainActivity.POSITION_MESSAGE);
 
         TextView textView = findViewById(R.id.translations_title);
-        textView.setText(message);
+        textView.setText("Showing Results for " + message);
 
         madeedApi.define(message, ShowResults.this);
     }
@@ -38,7 +38,7 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
         List<String> arabicDefs = new ArrayList<String>();
         for (Word w: words) {
-            arabicDefs.add(w.arabicDefinition);
+            arabicDefs.add(w.arabicDefinition + w.englishDefinition);
         }
 
         List<String> englishDefs = new ArrayList<String>();
