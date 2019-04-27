@@ -1,13 +1,15 @@
 package com.android.madeed;
 
+import android.text.TextUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 
 class Word {
-    String arabicDefinition;
-    String englishDefinition;
+    private String arabicDefinition;
+    private String englishDefinition;
     String example;
     String dataSourceAr;
     String dataSourceEn;
@@ -27,6 +29,13 @@ class Word {
         this.synonyms = synonyms;
         this.related = related;
     }
+
+
+    String getDefinition() {
+        return TextUtils.isEmpty(arabicDefinition) ? englishDefinition : arabicDefinition;
+    }
+
+
 
     static Word parseFrom(JSONObject obj) {
         try {

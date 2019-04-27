@@ -18,46 +18,29 @@ import java.util.List;
 
 public class ShowResults extends AppCompatActivity implements MadeedListener {
 
-    private MadeedApp madeedApp;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView mRecyclerView;
+    private ResultsAdapter resultsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_results);
 
-        final MadeedApi madeedApi = madeedApp.getApi(getApplicationContext());
+        final MadeedApi madeedApi = MadeedApp.getApi(getApplicationContext());
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.POSITION_MESSAGE);
 
         madeedApi.define(message, ShowResults.this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        resultsAdapter = new ResultsAdapter();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setAdapter(resultsAdapter);
     }
 
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
-        List<String> arabicDefs = new ArrayList<String>();
-        for (Word w: words) {
-            arabicDefs.add(w.arabicDefinition + w.englishDefinition);
-        }
-
-        List<String> englishDefs = new ArrayList<String>();
-        for (Word w: words) {
-            englishDefs.add(w.englishDefinition);
-        }
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.activity_result_textview,arabicDefs);
-
-        mRecyclerView.setAdapter(adapter);
-
+        resultsAdapter.setData(words);
     }
 
     @Override
