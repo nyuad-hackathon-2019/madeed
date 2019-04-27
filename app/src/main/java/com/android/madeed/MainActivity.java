@@ -1,14 +1,25 @@
 package com.android.madeed;
 
+<<<<<<< HEAD
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.MatrixCursor;
+=======
+import android.content.Intent;
+>>>>>>> adding tabs and viewpager
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+<<<<<<< HEAD
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+=======
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+>>>>>>> adding tabs and viewpager
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+<<<<<<< HEAD
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.support.v4.widget.CursorAdapter;
@@ -36,11 +48,28 @@ public class MainActivity extends AppCompatActivity implements MadeedListener {
     private List<String> suggestions = new ArrayList<>();
     private CursorAdapter suggestionAdapter;
 
+=======
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.widget.Toast;
+
+import java.io.IOException;
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+>>>>>>> adding tabs and viewpager
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+            Intent intent = new Intent(this, ResultsActivity.class);
+            startActivity(intent);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+<<<<<<< HEAD
         searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setIconifiedByDefault(false);
 
@@ -52,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements MadeedListener {
                 0);
 
         searchView.setSuggestionsAdapter(suggestionAdapter);
+=======
+        //search results activity
+
+>>>>>>> adding tabs and viewpager
 
         setSupportActionBar(toolbar);
 
@@ -137,3 +170,4 @@ public class MainActivity extends AppCompatActivity implements MadeedListener {
         startActivity(intent);
     }
 }
+

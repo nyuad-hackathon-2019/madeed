@@ -31,8 +31,6 @@ public class ResultsActivity extends AppCompatActivity {
         pageAdapter = new PageAdapter(getSupportFragmentManager(), tablay.getTabCount());
         viewPager.setAdapter(pageAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablay));
-
-
     }
 }
 class PageAdapter extends FragmentPagerAdapter{
