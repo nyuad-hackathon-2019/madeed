@@ -7,8 +7,12 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
 =======
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/madeed.iml" filepath="$PROJECT_DIR$/.idea/madeed.iml" />
 >>>>>>> initial layout
+=======
+      <module fileurl="file://$PROJECT_DIR$/madeed.iml" filepath="$PROJECT_DIR$/madeed.iml" />
+>>>>>>> tab layout for the search results page
     </modules>
   </component>
 </project>
