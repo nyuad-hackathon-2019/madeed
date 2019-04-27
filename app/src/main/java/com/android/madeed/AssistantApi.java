@@ -1,4 +1,8 @@
 package com.android.madeed;
 
-public class AssistantApi {
+import java.util.List;
+
+public abstract class AssistantApi {
+
+    abstract List<String> getResult(String query);
 }
