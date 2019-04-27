@@ -60,7 +60,7 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                viewPager.setCurrentItem(tab.getPosition(), true);
             }
 
         });

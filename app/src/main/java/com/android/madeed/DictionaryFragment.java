@@ -41,7 +41,6 @@ public class DictionaryFragment extends Fragment {
     }
 
 
-
     void setData(List<Word> words) {
         resultsAdapter.setData(words);
     }
