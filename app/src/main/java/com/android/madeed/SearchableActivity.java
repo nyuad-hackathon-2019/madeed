@@ -26,7 +26,7 @@ public class SearchableActivity extends AppCompatActivity {
     }
 
     public void doMySearch(String query) {
-        System.out.println("Fired off search...");
+        System.out.println("Fired off search..." + query);
     }
 
 }

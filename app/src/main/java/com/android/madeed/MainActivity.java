@@ -13,11 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SearchView searchView;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,22 @@ public class MainActivity extends AppCompatActivity
         searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setIconifiedByDefault(false);
         setSupportActionBar(toolbar);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+              public boolean onQueryTextSubmit(String query) {
+                  Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
+                  return false;
+              }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //    adapter.getFilter().filter(newText);
+                return false;
+            }
+
+
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
