@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements MadeedListener {
     }
 
     @Override
-    public void onSuggestionLookupComplete(String originalTerm, List<Word> words) {
+    public void onSuggestionLookupComplete(String originalTerm, List<String> words) {
         suggestions.clear();
-        for (Word w: words) suggestions.add(w.arabicDefinition);
+        suggestions.addAll(words);
         String[] columns = {
                 BaseColumns._ID,
                 SearchManager.SUGGEST_COLUMN_TEXT_1,
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener {
         MatrixCursor cursor = new MatrixCursor(columns);
 
         for (int i = 0; i < words.size(); i++) {
-            String[] tmp = {Integer.toString(i), words.get(i).arabicDefinition, words.get(i).arabicDefinition};
+            String[] tmp = {Integer.toString(i), words.get(i), words.get(i)};
             cursor.addRow(tmp);
         }
         suggestionAdapter.swapCursor(cursor);
