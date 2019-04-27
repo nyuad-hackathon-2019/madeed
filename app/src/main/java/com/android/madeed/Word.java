@@ -35,6 +35,10 @@ class Word {
         return TextUtils.isEmpty(arabicDefinition) ? englishDefinition : arabicDefinition;
     }
 
+    String getTranslation() {
+        return TextUtils.isEmpty(dataSourceAr) ? dataSourceEn : dataSourceAr;
+    }
+
 
 
     static Word parseFrom(JSONObject obj) {
