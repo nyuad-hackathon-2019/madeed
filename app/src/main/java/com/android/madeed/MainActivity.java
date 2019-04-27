@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
 
 
         });
-        
+
         ImageView userIconButton = (ImageView) findViewById(R.id.userIcon);
         userIconButton.setOnClickListener(new View.OnClickListener() {
             @Override
