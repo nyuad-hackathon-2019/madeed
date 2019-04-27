@@ -24,7 +24,7 @@ import java.util.concurrent.Executor;
 class MadeedApi {
 
     private static final String DEF_URL =
-            "https://ontology.birzeit.edu/sina/api/term/%s/?type=3&page=1&limit=10&apikey=samplekey";
+            "https://ontology.birzeit.edu/sina/api/term/%s/?type=7&page=1&limit=10&apikey=samplekey";
 
 
     private static final String SUG_URL =
