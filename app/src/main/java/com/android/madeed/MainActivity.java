@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 Toast.makeText(MainActivity.this, "FAB", Toast.LENGTH_SHORT).show();
-                madeedApi.texttospeech("المفالمفاتيحالمفاتيحالعربي");
+                madeedApi.texttospeech("what is up bro", "en");
             }
 
         });
