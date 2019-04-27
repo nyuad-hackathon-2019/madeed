@@ -35,26 +35,29 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder>
 
     @Override
     public int getItemCount() {
-        return words.size();
+        return words == null ? 0 : words.size();
     }
 
     static class WordViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView original;
         private TextView definition;
         private TextView translation;
         private TextView synonyms;
 
         WordViewHolder(View view) {
             super(view);
+            original = (TextView) view.findViewById(R.id.original);
             definition = (TextView) view.findViewById(R.id.definition);
             translation = (TextView) view.findViewById(R.id.translation);
             synonyms = (TextView) view.findViewById(R.id.synonyms);
         }
 
         void bind(Word w) {
+            original.setText(w.synSet +  " " + w.definition);
             definition.setText(w.getDefinition());
             translation.setText(w.getTranslation());
-            synonyms.setText(w.synonyms.toString());
+//            synonyms.setText(w.synonyms.toString());
         }
     }
 }

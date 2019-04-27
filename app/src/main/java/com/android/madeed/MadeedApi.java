@@ -65,7 +65,7 @@ class MadeedApi {
                         JSONArray results = response.getJSONArray("content");
                         List<Word> words = new ArrayList<>();
                         for (int i = 0; i < results.length(); i++) {
-                            words.add(Word.parseFrom(results.getJSONObject(i)));
+                            words.add(Word.parseFrom(term, results.getJSONObject(i)));
                         }
                         listener.onTermDefinitionComplete(term, words);
                     } catch (JSONException e) {
