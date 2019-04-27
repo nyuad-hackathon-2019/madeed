@@ -22,4 +22,14 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
+    <android.support.v7.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:queryHint="Search Here"
+        
+        android:iconifiedByDefault="false"
+        android:layout_alignParentTop="true"
+        />
+
 </android.support.v4.widget.DrawerLayout>
