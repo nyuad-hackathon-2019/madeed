@@ -8,7 +8,7 @@
 
     <string name="search_hint">Enter query</string>
     <string name="ontology">Ontology</string>
-    <string name="definiton">Definiton</string>
+    <string name="definition">Definition</string>
     <string name="morphology">Morphology""</string>
     />
 </resources>
