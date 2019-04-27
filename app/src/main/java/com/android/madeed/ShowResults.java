@@ -10,9 +10,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,6 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
         resultsAdapter.setData(words);
-
     }
 
     @Override

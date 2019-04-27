@@ -40,7 +40,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MadeedListener, NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String POSITION_MESSAGE= "com.android.madeed.POSITION";
+    public static final String POSITION_MESSAGE = "com.android.madeed.POSITION";
 
     private SearchView searchView;
     private MadeedApp madeedApp;
@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
                 madeedApi.suggestions(query, MainActivity.this);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 madeedApi.suggestions(newText, MainActivity.this);
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
 
 
         });
+
         ImageView userIconButton = (ImageView) findViewById(R.id.userIcon);
         userIconButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +120,10 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
         TabItem tab3;
         ViewPager viewPager;
         PagerAdapter pageAdapter;
-        tablay=(TabLayout) findViewById(R.id.tabLayout);
+        tablay = (TabLayout) findViewById(R.id.tabLayout);
         tab1 = (TabItem) findViewById(R.id.tabOntology);
         tab2 = (TabItem) findViewById(R.id.tabDefinition);
-        tab3  = (TabItem) findViewById(R.id.tabMorph);
+        tab3 = (TabItem) findViewById(R.id.tabMorph);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pageAdapter = new PageAdapter(getSupportFragmentManager(), tablay.getTabCount());
         viewPager.setAdapter(pageAdapter);
@@ -165,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
-    
+
     protected void onNewIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
