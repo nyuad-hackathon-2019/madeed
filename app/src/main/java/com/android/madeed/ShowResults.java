@@ -33,9 +33,6 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.POSITION_MESSAGE);
 
-        TextView textView = findViewById(R.id.translations_title);
-        textView.setText("Showing Results for " + message);
-
         madeedApi.define(message, ShowResults.this);
     }
 
@@ -59,7 +56,6 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.activity_result_textview,arabicDefs);
 
-        ListView listView = findViewById(R.id.list_translations);
         mRecyclerView.setAdapter(adapter);
 
     }
