@@ -1,6 +1,8 @@
 package com.android.madeed;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.util.Log;
 
 import com.android.madeed.Word;
@@ -16,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,11 @@ class MadeedApi {
     private static final String SUG_URL =
             "https://ontology.birzeit.edu/sina/api/Autocomplete/%s?apikey=samplekey&limit=100";
 
+    private static final String AUDIO_URL =
+            "https://code.responsivevoice.org/getvoice.php?t=%s&tl=ar&sv=g1&vn=&pitch=0.5&rate=0.5&vol=1&gender=male";
+
     private static MadeedApi sInstance = null;
+
 
     private RequestQueue queue;
 
@@ -99,6 +106,23 @@ class MadeedApi {
                     }
                 }
         ));
+    }
+
+    void texttospeech(final String querytext) {
+        MediaPlayer mp = new MediaPlayer();
+        try {
+            mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mp.setDataSource(String.format(AUDIO_URL, querytext));
+            mp.prepareAsync();
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.start();
+                }
+            });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }
