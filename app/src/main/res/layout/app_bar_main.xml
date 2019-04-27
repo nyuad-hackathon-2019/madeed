@@ -31,7 +31,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
@@ -65,5 +65,5 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+    <include layout="@layout/content_main" />
 </android.support.design.widget.CoordinatorLayout>
