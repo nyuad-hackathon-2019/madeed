@@ -1,6 +1,8 @@
 package com.android.madeed;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
@@ -15,7 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     SearchView searchView;
 
@@ -53,38 +58,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-}
 
 
-/**
- * Performs speech recognition on raw PCM audio and prints the transcription.
- *
- * @param fileName the path to a PCM audio file to transcribe.
- */
-public static void syncRecognizeFile(String fileName) throws Exception {
-    try (SpeechClient speech = SpeechClient.create()) {
-        Path path = Paths.get(fileName);
-        byte[] data = Files.readAllBytes(path);
-        ByteString audioBytes = ByteString.copyFrom(data);
+    private static final int SPEECH_REQUEST_CODE = 0;
+    // Create an intent that can start the Speech Recognizer activity
+    private void displaySpeechRecognizer() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+    // Start the activity, the intent will be populated with the speech text
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
 
-        // Configure request with local raw PCM audio
-        RecognitionConfig config =
-                RecognitionConfig.newBuilder()
-                        .setEncoding(AudioEncoding.LINEAR16)
-                        .setLanguageCode("en-US")
-                        .setSampleRateHertz(16000)
-                        .build();
-        RecognitionAudio audio = RecognitionAudio.newBuilder().setContent(audioBytes).build();
-
-        // Use blocking call to get audio transcript
-        RecognizeResponse response = speech.recognize(config, audio);
-        List<SpeechRecognitionResult> results = response.getResultsList();
-
-        for (SpeechRecognitionResult result : results) {
-            // There can be several alternative transcripts for a given chunk of speech. Just use the
-            // first (most likely) one here.
-            SpeechRecognitionAlternative alternative = result.getAlternativesList().get(0);
-            System.out.printf("Transcription: %s%n", alternative.getTranscript());
+    // This callback is invoked when the Speech Recognizer returns.
+    // This is where you process the intent and extract the speech text from the intent.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> results = data.getStringArrayListExtra(
+                    RecognizerIntent.EXTRA_RESULTS);
+            String spokenText = results.get(0);
+            // Do something with spokenText
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
