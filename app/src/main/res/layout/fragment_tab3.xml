@@ -8,9 +8,6 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Morph"
-        android:textSize="14pt"
-        android:padding="20dp"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
