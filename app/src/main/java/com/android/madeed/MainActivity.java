@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
 
 
         });
-        
         ImageView userIconButton = (ImageView) findViewById(R.id.userIcon);
         userIconButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
 
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
+
         Log.e("Madeed", words.toString());
     }
 
