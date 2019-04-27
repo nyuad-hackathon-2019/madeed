@@ -25,6 +25,10 @@ class MadeedApi {
     private static final String DEF_URL =
             "https://ontology.birzeit.edu/sina/api/term/%s/?type=3&page=1&limit=10&apikey=samplekey";
 
+
+    private static final String SUG_URL =
+            "https://ontology.birzeit.edu/sina/api/Autocomplete/%s?apikey=samplekey&limit=100";
+
     private static MadeedApi sInstance = null;
 
     private RequestQueue queue;
@@ -70,10 +74,37 @@ class MadeedApi {
         ));
     }
 
+    void suggestions(final String phrase, final MadeedListener listener) {
+        queue.add(new JsonObjectRequest(
+                String.format(DEF_URL, phrase),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray results = response.getJSONArray("content");
+                            List<String> words = new ArrayList<>();
+                            for (int i = 0; i < results.length(); i++) {
+                                words.add(results.getString(i));
+                            }
+                            listener.onSuggestionLookupComplete(phrase, words);
+                        } catch (JSONException e) {
+                            Log.e("Madeed", "ERROR", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Madeed", "ERROR" + error.toString());
+                    }
+                }
+        ));
+    }
 
 }
 
 interface MadeedListener {
     void onTermDefinitionComplete(String originalTerm, List<Word> words);
-    void onSuggestonLookupComplete(String originalTerm, List<String> words);
+    void onSuggestionLookupComplete(String originalTerm, List<String> words);
 }

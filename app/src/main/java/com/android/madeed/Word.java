@@ -16,7 +16,7 @@ class Word {
     List<String> synonyms;
     List<Word> related;
 
-    public Word(String arabicDefinition, String englishDefinition, String example, String dataSourceAr, String dataSourceEn, String synSet, String definition, List<String> synonyms, List<Word> related) {
+    private Word(String arabicDefinition, String englishDefinition, String example, String dataSourceAr, String dataSourceEn, String synSet, String definition, List<String> synonyms, List<Word> related) {
         this.arabicDefinition = arabicDefinition;
         this.englishDefinition = englishDefinition;
         this.example = example;
@@ -28,7 +28,7 @@ class Word {
         this.related = related;
     }
 
-    public static Word parseFrom(JSONObject obj) {
+    static Word parseFrom(JSONObject obj) {
         try {
             return new Word(
                     obj.getString("arabicGloss"),
@@ -42,5 +42,6 @@ class Word {
                     null
                     );
         } catch (JSONException e) {}
+        return null;
     }
 }
