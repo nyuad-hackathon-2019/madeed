@@ -53,31 +53,7 @@ public class ShowResults extends AppCompatActivity implements MadeedListener {
 
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
-        List<String> arabicDefs = new ArrayList<String>();
-        for (Word w: words) {
-            arabicDefs.add(w.arabicDefinition + w.englishDefinition);
-        }
-
-        List<String> englishDefs = new ArrayList<String>();
-        for (Word w: words) {
-            englishDefs.add(w.englishDefinition);
-        }
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.activity_result_textview,arabicDefs);
-        ListView listView = findViewById(R.id.list_translations);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String data = (String)parent.getItemAtPosition(position);
-                final MadeedApi madeedApi = madeedApp.getApi(getApplicationContext());
-                //Toast.makeText(ShowResults.this, data, Toast.LENGTH_SHORT).show();
-                madeedApi.texttospeech(data, "ar");
-            }
-        });
-        listView.setAdapter(adapter);
         resultsAdapter.setData(words);
-
     }
 
     @Override

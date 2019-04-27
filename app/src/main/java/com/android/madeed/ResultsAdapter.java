@@ -2,9 +2,11 @@ package com.android.madeed;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -44,6 +46,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder>
         private TextView definition;
         private TextView source;
         private TextView synonyms;
+        private MadeedApp madeedApp;
 
         WordViewHolder(View view) {
             super(view);
@@ -53,11 +56,23 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder>
             synonyms = (TextView) view.findViewById(R.id.synonyms);
         }
 
-        void bind(Word w) {
-            original.setText(w.synSet +  " " + w.definition);
+        void bind(final Word w) {
+            original.setText(w.synSet + " " + w.definition);
             definition.setText(w.getDefinition());
             source.setText(w.getSource());
 //            synonyms.setText(w.synonyms.toString());
+
+            this.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final MadeedApi madeedApi = madeedApp.getApi(view.getContext());
+                    if (w.isDefinition()) {
+                        madeedApi.texttospeech(w.getDefinition(), "en");
+                    } else { // includes isTranslation and others
+                        madeedApi.texttospeech(w.original, "ar");
+                    }
+                }
+            });
         }
     }
 }
