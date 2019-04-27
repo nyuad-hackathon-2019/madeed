@@ -85,12 +85,16 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
             }
         });
 
+        SearchManager searchManager = (SearchManager) getSystemService(this.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         final MadeedApi madeedApi = madeedApp.getApi(getApplicationContext());
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                madeedApi.suggestions(query, MainActivity.this);
                 return false;
             }
             @Override
@@ -170,6 +174,14 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+    
+    protected void onNewIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            searchView.setQuery(query, false);
+            Log.d("Madeed", query);
+        }
     }
 }
 
