@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if( (username_value.equals("Educationteam")) && (password_value.equals("password"))) {
-            Toast.makeText(this, "true",  Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
            startActivity(intent);
         } else {
