@@ -112,21 +112,11 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
                 Toast.makeText(MainActivity.this, "Login here", Toast.LENGTH_LONG).show();
             }
         });
-        TabLayout tablay;
-        TabItem tab1;
-        TabItem tab2;
-        TabItem tab3;
-        ViewPager viewPager;
-        PagerAdapter pageAdapter;
-        tablay=(TabLayout) findViewById(R.id.tabLayout);
-        tab1 = (TabItem) findViewById(R.id.tabOntology);
-        tab2 = (TabItem) findViewById(R.id.tabDefinition);
-        tab3  = (TabItem) findViewById(R.id.tabMorph);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        pageAdapter = new PageAdapter(getSupportFragmentManager(), tablay.getTabCount());
-        viewPager.setAdapter(pageAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablay));
-
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        PageAdapter myPagerAdapter = new PageAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(myPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
