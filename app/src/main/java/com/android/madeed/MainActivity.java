@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
                 madeedApi.suggestions(query, MainActivity.this);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 madeedApi.suggestions(newText, MainActivity.this);
@@ -112,16 +113,10 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
                 Toast.makeText(MainActivity.this, "Login here", Toast.LENGTH_LONG).show();
             }
         });
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        PageAdapter myPagerAdapter = new PageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(myPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
-
         Log.e("Madeed", words.toString());
     }
 
