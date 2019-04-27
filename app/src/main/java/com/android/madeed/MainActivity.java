@@ -32,13 +32,13 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
-              public boolean onQueryTextSubmit(String query) {
-                  Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
-                  return false;
-              }
+            public boolean onQueryTextSubmit(String query) {
+              //TODO: Connect button to the API search.
+              Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
+              return false;
+            }
             @Override
             public boolean onQueryTextChange(String newText) {
-                //    adapter.getFilter().filter(newText);
                 return false;
             }
 
