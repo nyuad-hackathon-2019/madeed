@@ -24,7 +24,7 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:id="@+id/morphology"
-        android:paddingBottom="12dp"
+        android:paddingBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
