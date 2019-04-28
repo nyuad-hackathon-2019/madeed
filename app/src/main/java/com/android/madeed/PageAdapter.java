@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TITLES = new String[] {"Dictionary", "Ontology", "Morphology"};
+    private static final String[] TITLES = new String[] {"Dictionary", "Morphology", "Morphology"};
 
     private Fragment[] fragments = new Fragment[3];
 
