@@ -3,6 +3,7 @@ package com.android.madeed;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -85,8 +86,17 @@ class MadeedApi {
     }
 
     void morphologies(final String query, final MadeedListener listener) {
+        Uri.Builder uriBuilder = new Uri.Builder();
+        uriBuilder.scheme("https")
+        .authority("ontology.birzeit.edu")
+        .appendPath("sina")
+        .appendPath("api")
+        .appendPath("LemmaSearch")
+        .appendPath(query)
+        .appendQueryParameter("apikey", "samplekey");
+        String val = uriBuilder.build().toString();
         queue.add(new JsonArrayRequest(
-                String.format(MORPH_URL, query),
+                val,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -95,9 +105,11 @@ class MadeedApi {
                             for (int i = 0; i < response.length(); i++) {
                                 dictionaryResults.add(Morphology.create(response.getJSONObject(i)));
                             }
+                            Log.d("Madeed", " " + dictionaryResults.size());
+
                             listener.onMorphologyRequestComplete(query, dictionaryResults);
                         } catch (JSONException e) {
-                            Log.e("Madeed", "ERROR", e);
+                            Log.e("Madeed", "morphology error", e);
                         }
                     }
                 },

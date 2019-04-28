@@ -10,7 +10,6 @@ import java.util.List;
 
 class DictionaryResult {
 
-    ResultsAdapter.MadeedResultType type = ResultsAdapter.MadeedResultType.DICTIONARY_RESULT;
 
     private String arabicDefinition;
     private String englishDefinition;

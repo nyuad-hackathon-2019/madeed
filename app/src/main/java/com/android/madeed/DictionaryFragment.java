@@ -12,9 +12,13 @@ import java.util.List;
 
 public class DictionaryFragment extends BaseFragment  {
 
+    ResultsAdapter resultsAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
 
         View root =  inflater.inflate(R.layout.fragment_dictionary, container, false);
         mRecyclerView = root.findViewById(R.id.recycler_view);
@@ -36,5 +40,10 @@ public class DictionaryFragment extends BaseFragment  {
 
     void load(String query) {
         MadeedApi.getInstance(MadeedApp.getContext()).define(query, this);
+    }
+
+    @Override
+    public void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults) {
+        resultsAdapter.setDictResults(dictionaryResults);
     }
 }

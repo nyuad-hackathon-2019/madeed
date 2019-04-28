@@ -34,7 +34,7 @@ public class ShowResults extends AppCompatActivity {
         setUpViewPager(getIntent().getStringExtra(MainActivity.POSITION_MESSAGE));
     }
 
-    private void setUpViewPager(final String query ) {
+    private void setUpViewPager(final String query) {
         viewPager = findViewById(R.id.viewPager);
         myPagerAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
@@ -49,7 +49,6 @@ public class ShowResults extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition(), true);
 
             }
 

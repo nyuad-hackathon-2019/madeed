@@ -9,19 +9,11 @@ import java.util.List;
 public abstract class BaseFragment extends Fragment implements MadeedListener {
 
     RecyclerView mRecyclerView;
-    ResultsAdapter resultsAdapter;
-
-    void setDictData(List<DictionaryResult> dictionaryResults) {
-        resultsAdapter.setDictResults(dictionaryResults);
-    }
-
-    abstract ResultsAdapter createAdapter();
 
     abstract void load(String phrase);
 
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults) {
-        setDictData(dictionaryResults);
     }
 
     @Override
@@ -31,6 +23,5 @@ public abstract class BaseFragment extends Fragment implements MadeedListener {
 
     @Override
     public void onMorphologyRequestComplete(String originalTerm, List<Morphology> dictionaryResults) {
-        resultsAdapter.setMorphResults(dictionaryResults);
     }
 }
