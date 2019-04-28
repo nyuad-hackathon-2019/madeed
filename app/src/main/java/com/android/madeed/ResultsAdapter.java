@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -74,6 +75,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolde
         private TextView definition;
         private TextView source;
         private TextView synonyms;
+        private ImageView speaker;
 
         // morphology results only
         private TextView entryAr;
@@ -89,6 +91,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolde
                 definition = view.findViewById(R.id.definition);
                 source =  view.findViewById(R.id.source);
                 synonyms =  view.findViewById(R.id.synonyms);
+                speaker = view.findViewById(R.id.speaker);
             } else {
                 entryAr = view.findViewById(R.id.entryAr);
                 morphology = view.findViewById(R.id.morphology);
