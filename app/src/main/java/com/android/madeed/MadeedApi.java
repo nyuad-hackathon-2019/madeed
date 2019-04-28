@@ -77,6 +77,7 @@ class MadeedApi {
             new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    Log.e("Madeed", "ERROR" + error.toString());
 
                 }
             }
