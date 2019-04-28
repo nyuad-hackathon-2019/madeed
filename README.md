@@ -9,3 +9,8 @@ By bringing the database to mobile and incorporating voice and text to speech, w
 https://docs.google.com/presentation/d/1qi_x6xaXHg1pkCX_gJsBIAxQa7xrWYVA0l463fhfQxs/edit?usp=sharing
 
 ---
+
+<p align="center">
+  <img width="250"  src="./img/dictionary.png">
+  <img width="250"  src="./img/query.png">
+</p>
