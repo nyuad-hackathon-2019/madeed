@@ -31,16 +31,8 @@ public class LoginActivity extends AppCompatActivity {
         String password_value = password.getText().toString();
 
 
-        if( (username_value.equals("Educationteam")) && (password_value.equals("password"))) {
-            Intent intent = new Intent(this, MainActivity.class);
-           startActivity(intent);
-        } else {
-            Toast.makeText(this, "Password and username don't match",  Toast.LENGTH_SHORT).show();
-
-        }
-
-
-
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
 
     }
 
