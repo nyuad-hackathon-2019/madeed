@@ -85,7 +85,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolde
                     public void onClick(View view) {
                         final MadeedApi madeedApi = madeedApp.getApi(MadeedApp.getContext());
                         if (d.isDefinition()) {
-                            madeedApi.texttospeech(d.getDefinition(), "en");
+                            madeedApi.texttospeech(d.getDefinition(), "ar");
                         } else { // includes isTranslation and others
                             madeedApi.texttospeech(d.original, "ar");
                         }
