@@ -4,57 +4,59 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.provider.BaseColumns;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowResults extends AppCompatActivity implements MadeedListener {
+public class ShowResults extends AppCompatActivity {
 
-    private MadeedApp madeedApp;
+    private ViewPager viewPager;
+    private PageAdapter myPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_results);
-
-        final MadeedApi madeedApi = madeedApp.getApi(getApplicationContext());
-
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.POSITION_MESSAGE);
-
-        TextView textView = findViewById(R.id.translations_title);
-        textView.setText("Showing Results for " + message);
-
-        madeedApi.define(message, ShowResults.this);
+        setUpViewPager(getIntent().getStringExtra(MainActivity.POSITION_MESSAGE));
     }
 
-    @Override
-    public void onTermDefinitionComplete(String originalTerm, List<Word> words) {
-        List<String> arabicDefs = new ArrayList<String>();
-        for (Word w: words) {
-            arabicDefs.add(w.arabicDefinition + w.englishDefinition);
-        }
+    private void setUpViewPager(final String query ) {
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        myPagerAdapter = new PageAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(myPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
 
-        List<String> englishDefs = new ArrayList<String>();
-        for (Word w: words) {
-            englishDefs.add(w.englishDefinition);
-        }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.activity_result_textview,arabicDefs);
+            }
 
-        ListView listView = findViewById(R.id.list_translations);
-        listView.setAdapter(adapter);
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
 
-    }
+            }
 
-    @Override
-    public void onSuggestionLookupComplete(String originalTerm, List<String> words) {
-        Log.e("Madeed", words.toString());
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
+            }
+        });
     }
 }
