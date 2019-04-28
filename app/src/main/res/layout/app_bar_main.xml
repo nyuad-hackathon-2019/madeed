@@ -26,7 +26,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:adjustViewBounds="true"
                 android:clickable="true"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_user_icon" />
         </android.support.v7.widget.Toolbar>
 
