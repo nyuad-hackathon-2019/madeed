@@ -2,23 +2,27 @@ package com.android.madeed;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.List;
 
 class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder> {
 
-    private List<Word> words;
+    enum MadeedResultType {
+        DEFINITION,
+        MORPHOLOGY,
+        ONTOLOGY
+    }
+
+    private List<Definition> definitions;
 
     ResultsAdapter() {}
 
-    void setData(List<Word> words) {
-        this.words = words;
+    void setData(List<Definition> definitions) {
+        this.definitions = definitions;
         notifyDataSetChanged();
     }
 
@@ -32,12 +36,12 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
-        holder.bind(words.get(position));
+        holder.bind(definitions.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return words == null ? 0 : words.size();
+        return definitions == null ? 0 : definitions.size();
     }
 
     static class WordViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +60,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder>
             synonyms = (TextView) view.findViewById(R.id.synonyms);
         }
 
-        void bind(final Word w) {
+        void bind(final Definition w) {
             original.setText(w.synSet + " " + w.definition);
             definition.setText(w.getDefinition());
             source.setText(w.getSource());

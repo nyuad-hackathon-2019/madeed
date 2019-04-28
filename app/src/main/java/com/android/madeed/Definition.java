@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-class Word {
+class Definition {
+
+    ResultsAdapter.MadeedResultType type = ResultsAdapter.MadeedResultType.DEFINITION;
 
     private String arabicDefinition;
     private String englishDefinition;
@@ -19,11 +21,11 @@ class Word {
     String synSet;
     String definition;
     List<String> synonyms;
-    List<Word> related;
+    List<Definition> related;
     String isTranslation;
     String isGloss;
 
-    public Word(String arabicDefinition, String englishDefinition, String example, String original, String dataSourceAr, String dataSourceEn, String synSet, String definition, List<String> synonyms, List<Word> related, String isTranslation, String isGloss) {
+    public Definition(String arabicDefinition, String englishDefinition, String example, String original, String dataSourceAr, String dataSourceEn, String synSet, String definition, List<String> synonyms, List<Definition> related, String isTranslation, String isGloss) {
         this.arabicDefinition = arabicDefinition;
         this.englishDefinition = englishDefinition;
         this.example = example;
@@ -71,9 +73,9 @@ class Word {
     }
 
 
-    static Word parseFrom(String original, JSONObject obj) {
+    static Definition parseFrom(String original, JSONObject obj) {
         try {
-            return new Word(
+            return new Definition(
                     obj.getString("arabicGloss"),
                     obj.getString("englishGloss"),
                     obj.getString("example"),

@@ -5,8 +5,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 
-import com.android.madeed.Word;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -19,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -63,11 +60,11 @@ class MadeedApi {
                 public void onResponse(JSONObject response) {
                     try {
                         JSONArray results = response.getJSONArray("content");
-                        List<Word> words = new ArrayList<>();
+                        List<Definition> definitions = new ArrayList<>();
                         for (int i = 0; i < results.length(); i++) {
-                            words.add(Word.parseFrom(term, results.getJSONObject(i)));
+                            definitions.add(Definition.parseFrom(term, results.getJSONObject(i)));
                         }
-                        listener.onTermDefinitionComplete(term, words);
+                        listener.onTermDefinitionComplete(term, definitions);
                     } catch (JSONException e) {
                         Log.e("Madeed", "ERROR", e);
                     }
@@ -128,6 +125,6 @@ class MadeedApi {
 }
 
 interface MadeedListener {
-    void onTermDefinitionComplete(String originalTerm, List<Word> words);
+    void onTermDefinitionComplete(String originalTerm, List<Definition> definitions);
     void onSuggestionLookupComplete(String originalTerm, List<String> words);
 }
