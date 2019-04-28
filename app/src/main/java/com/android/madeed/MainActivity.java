@@ -69,15 +69,17 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
             }
         });
 
-        SearchManager searchManager = (SearchManager) getSystemService(this.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
         final MadeedApi madeedApi = madeedApp.getApi(getApplicationContext());
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (query.equals("س")) {
+                    Toast.makeText(MainActivity.this, "happen", Toast.LENGTH_SHORT).show();
+                    searchView.setQuery("", false);
+                    return false;
+                }
                 madeedApi.suggestions(query, MainActivity.this);
                 return false;
             }
@@ -99,7 +101,11 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
                 startActivity(intent);
             }
         });
+        final SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
     }
+
+
 
     @Override
     public void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults) {

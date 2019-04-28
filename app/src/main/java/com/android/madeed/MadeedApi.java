@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.regex.Pattern;
 
 class MadeedApi {
 
@@ -54,6 +55,61 @@ class MadeedApi {
             sInstance = new MadeedApi(context);
         }
         return sInstance;
+    }
+
+    public void getAnswer(String question, final AssistantResponseListener listener) {
+        String lang = detectLanguage(question);
+        String asciiEncodedQuestion = "";
+        try {
+            Uri.Builder uriBuilder = new Uri.Builder();
+            uriBuilder.scheme("https")
+                    .authority("https://nl2sparql.azurewebsites.net/")
+                    .appendPath("Query")
+                    .appendQueryParameter("text", question)
+                    .appendQueryParameter("queryLanguage", lang)
+                    .appendQueryParameter("resultLanguage", lang)
+                    .appendQueryParameter("numberOfResults", String.valueOf(QUES_NO_OF_RESULTS));
+            asciiEncodedQuestion = uriBuilder.build().toString();
+        } catch (Exception e) {
+            Log.e("Madeed", "ERROR" + e.toString());
+        }
+        queue.add(new JsonArrayRequest(asciiEncodedQuestion,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            List<String> answerLabels = new ArrayList<>();
+                            for (int i = 0; i < response.length(); i++) {
+                                try{
+                                    answerLabels.add(response.getJSONObject(i).getString("name"));
+                                } catch (Exception e){
+                                    answerLabels.add(response.getJSONObject(i).getString("message"));
+                                }
+                            }
+                            listener.onQuestionAnswered(answerLabels);
+                        } catch (JSONException e) {
+                            Log.e("Madeed", "ERROR" + e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ));
+
+    }
+
+    String detectLanguage(String term) {
+        String pattern = "[\\u0600-\\u06FF\\uFE70-\\uFEFC]";
+        Pattern media = Pattern.compile(pattern);
+        java.util.regex.Matcher m = media.matcher(term);
+        if (m.find())
+            return "ar";
+        else
+            return "en";
     }
 
     void define(final String term, final MadeedListener listener) {
@@ -164,13 +220,15 @@ class MadeedApi {
             e.printStackTrace();
         }
     }
-
-
-
+    
 }
 
 interface MadeedListener {
     void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults);
     void onMorphologyRequestComplete(String originalTerm, List<Morphology> dictionaryResults);
     void onSuggestionLookupComplete(String originalTerm, List<String> words);
+}
+
+interface AssistantResponseListener {
+    void onQuestionAnswered(List<String> answers);
 }
