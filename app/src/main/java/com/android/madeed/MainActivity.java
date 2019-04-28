@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
     }
 
     @Override
-    public void onTermDefinitionComplete(String originalTerm, List<Definition> definitions) {
-        Log.e("Madeed", definitions.toString());
+    public void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults) {
+        Log.e("Madeed", dictionaryResults.toString());
     }
 
     @Override
@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
         }
         suggestionAdapter.swapCursor(cursor);
     }
+
+    @Override
+    public void onMorphologyRequestComplete(String originalTerm, List<Morphology> dictionaryResults) { }
 
     public void doSearch(String position) {
         Log.e("Madeed", position);

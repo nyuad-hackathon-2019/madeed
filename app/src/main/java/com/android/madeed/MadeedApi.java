@@ -26,6 +26,9 @@ class MadeedApi {
     private static final String DEF_URL =
             "https://ontology.birzeit.edu/sina/api/term/%s/?type=7&page=1&limit=10&apikey=samplekey";
 
+    private static final String MORPH_URL =
+            "https://ontology.birzeit.edu/sina/api/LemmaSearch/%s?apikey=samplekey";
+
 
     private static final String SUG_URL =
             "https://ontology.birzeit.edu/sina/api/Autocomplete/%s?apikey=samplekey&limit=100";
@@ -38,9 +41,10 @@ class MadeedApi {
 
     private RequestQueue queue;
 
-    private Executor executor;
+    private final MediaPlayer mp;
 
     private MadeedApi(Context context) {
+        mp = new MediaPlayer();
         queue = Volley.newRequestQueue(context);
     }
 
@@ -60,11 +64,11 @@ class MadeedApi {
                 public void onResponse(JSONObject response) {
                     try {
                         JSONArray results = response.getJSONArray("content");
-                        List<Definition> definitions = new ArrayList<>();
+                        List<DictionaryResult> dictionaryResults = new ArrayList<>();
                         for (int i = 0; i < results.length(); i++) {
-                            definitions.add(Definition.parseFrom(term, results.getJSONObject(i)));
+                            dictionaryResults.add(DictionaryResult.parseFrom(term, results.getJSONObject(i)));
                         }
-                        listener.onTermDefinitionComplete(term, definitions);
+                        listener.onTermDefinitionComplete(term, dictionaryResults);
                     } catch (JSONException e) {
                         Log.e("Madeed", "ERROR", e);
                     }
@@ -76,6 +80,32 @@ class MadeedApi {
 
                 }
             }
+        ));
+    }
+
+    void morphologies(final String query, final MadeedListener listener) {
+        queue.add(new JsonArrayRequest(
+                String.format(MORPH_URL, query),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            List<Morphology> dictionaryResults = new ArrayList<>();
+                            for (int i = 0; i < response.length(); i++) {
+                                dictionaryResults.add(Morphology.create(response.getJSONObject(i)));
+                            }
+                            listener.onMorphologyRequestComplete(query, dictionaryResults);
+                        } catch (JSONException e) {
+                            Log.e("Madeed", "ERROR", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
         ));
     }
 
@@ -106,8 +136,8 @@ class MadeedApi {
     }
 
     void texttospeech(final String querytext, final String loc) {
-        MediaPlayer mp = new MediaPlayer();
         try {
+            mp.reset();
             mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mp.setDataSource(String.format(AUDIO_URL, querytext, loc));
             mp.prepareAsync();
@@ -122,9 +152,12 @@ class MadeedApi {
         }
     }
 
+
+
 }
 
 interface MadeedListener {
-    void onTermDefinitionComplete(String originalTerm, List<Definition> definitions);
+    void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults);
+    void onMorphologyRequestComplete(String originalTerm, List<Morphology> dictionaryResults);
     void onSuggestionLookupComplete(String originalTerm, List<String> words);
 }

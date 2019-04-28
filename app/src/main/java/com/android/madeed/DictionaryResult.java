@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-class Definition {
+class DictionaryResult {
 
-    ResultsAdapter.MadeedResultType type = ResultsAdapter.MadeedResultType.DEFINITION;
+    ResultsAdapter.MadeedResultType type = ResultsAdapter.MadeedResultType.DICTIONARY_RESULT;
 
     private String arabicDefinition;
     private String englishDefinition;
@@ -21,11 +21,11 @@ class Definition {
     String synSet;
     String definition;
     List<String> synonyms;
-    List<Definition> related;
+    List<DictionaryResult> related;
     String isTranslation;
     String isGloss;
 
-    public Definition(String arabicDefinition, String englishDefinition, String example, String original, String dataSourceAr, String dataSourceEn, String synSet, String definition, List<String> synonyms, List<Definition> related, String isTranslation, String isGloss) {
+    private DictionaryResult(String arabicDefinition, String englishDefinition, String example, String original, String dataSourceAr, String dataSourceEn, String synSet, String definition, List<String> synonyms, List<DictionaryResult> related, String isTranslation, String isGloss) {
         this.arabicDefinition = arabicDefinition;
         this.englishDefinition = englishDefinition;
         this.example = example;
@@ -73,9 +73,9 @@ class Definition {
     }
 
 
-    static Definition parseFrom(String original, JSONObject obj) {
+    static DictionaryResult parseFrom(String original, JSONObject obj) {
         try {
-            return new Definition(
+            return new DictionaryResult(
                     obj.getString("arabicGloss"),
                     obj.getString("englishGloss"),
                     obj.getString("example"),

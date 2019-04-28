@@ -9,74 +9,117 @@ import android.widget.TextView;
 
 import java.util.List;
 
-class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder> {
+class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolder> {
 
-    enum MadeedResultType {
-        DEFINITION,
+    public enum MadeedResultType {
+        DICTIONARY_RESULT,
         MORPHOLOGY,
         ONTOLOGY
     }
 
-    private List<Definition> definitions;
+    private List<DictionaryResult> dictionaryResults;
+    private List<Morphology> morphologies;
+
+    private MadeedResultType type;
 
     ResultsAdapter() {}
 
-    void setData(List<Definition> definitions) {
-        this.definitions = definitions;
+    void setDictResults(List<DictionaryResult> dictionaryResults) {
+        type = MadeedResultType.DICTIONARY_RESULT;
+        this.dictionaryResults = dictionaryResults;
+        notifyDataSetChanged();
+    }
+
+    void setMorphResults(List<Morphology> morphResults) {
+        type = MadeedResultType.MORPHOLOGY;
+        this.morphologies = morphResults;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.result, parent, false);
-        return new WordViewHolder(itemView);
+    public ResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = null;
+        if (type == MadeedResultType.DICTIONARY_RESULT) {
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.dictionary_result, parent, false);
+        } else if (type == MadeedResultType.MORPHOLOGY){
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.morphology_result, parent, false);
+        } else {
+            throw new IllegalArgumentException("Ontology currently not supported");
+        }
+        return new ResultViewHolder(itemView, type);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
-        holder.bind(definitions.get(position));
+    public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
+        
+        if (type == MadeedResultType.DICTIONARY_RESULT)  {
+            holder.bind(dictionaryResults.get(position), null);
+        } else if (type == MadeedResultType.MORPHOLOGY) {
+            holder.bind(null, morphologies.get(position));
+        } else throw new IllegalArgumentException("only support morphologies and dictionary results");
     }
 
     @Override
     public int getItemCount() {
-        return definitions == null ? 0 : definitions.size();
+        return dictionaryResults == null ? 0 : dictionaryResults.size();
     }
 
-    static class WordViewHolder extends RecyclerView.ViewHolder {
+    static class ResultViewHolder extends RecyclerView.ViewHolder {
 
+        // DictionaryResult Data fields only
         private TextView original;
         private TextView definition;
         private TextView source;
         private TextView synonyms;
+
+        // morphology results only
+        private TextView entryAr;
+        private TextView morphology;
+        private TextView pos;
+
         private MadeedApp madeedApp;
 
-        WordViewHolder(View view) {
+        ResultViewHolder(View view, MadeedResultType type) {
             super(view);
-            original = (TextView) view.findViewById(R.id.original);
-            definition = (TextView) view.findViewById(R.id.definition);
-            source = (TextView) view.findViewById(R.id.source);
-            synonyms = (TextView) view.findViewById(R.id.synonyms);
+            if (type == MadeedResultType.DICTIONARY_RESULT) {
+                original =  view.findViewById(R.id.original);
+                definition = view.findViewById(R.id.definition);
+                source =  view.findViewById(R.id.source);
+                synonyms =  view.findViewById(R.id.synonyms);
+            } else {
+                entryAr = view.findViewById(R.id.entryAr);
+                morphology = view.findViewById(R.id.morphology);
+                pos = view.findViewById(R.id.pos);
+            }
         }
 
-        void bind(final Definition w) {
-            original.setText(w.synSet + " " + w.definition);
-            definition.setText(w.getDefinition());
-            source.setText(w.getSource());
-//            synonyms.setText(w.synonyms.toString());
+        void bind(final DictionaryResult d, final Morphology m) {
+            if (d != null) {
+                original.setText(d.synSet + " " + d.definition);
+                definition.setText(d.getDefinition());
+                source.setText(d.getSource());
 
-            this.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final MadeedApi madeedApi = madeedApp.getApi(view.getContext());
-                    if (w.isDefinition()) {
-                        madeedApi.texttospeech(w.getDefinition(), "en");
-                    } else { // includes isTranslation and others
-                        madeedApi.texttospeech(w.original, "ar");
+                this.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final MadeedApi madeedApi = madeedApp.getApi(MadeedApp.getContext());
+                        if (d.isDefinition()) {
+                            madeedApi.texttospeech(d.getDefinition(), "en");
+                        } else { // includes isTranslation and others
+                            madeedApi.texttospeech(d.original, "ar");
+                        }
                     }
-                }
-            });
+                });
+            } else if (m != null) {
+                entryAr.setText(m.entryAr);
+                morphology.setText(m.morphology);
+                pos.setText(m.pos);
+            } else {
+                throw new IllegalArgumentException("both Dictionaryresult and morphology were null. how? ");
+            }
         }
     }
 }

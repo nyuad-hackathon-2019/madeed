@@ -35,10 +35,10 @@ public class ShowResults extends AppCompatActivity {
     }
 
     private void setUpViewPager(final String query ) {
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager);
         myPagerAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
 
@@ -59,4 +59,6 @@ public class ShowResults extends AppCompatActivity {
             }
         });
     }
+
+
 }

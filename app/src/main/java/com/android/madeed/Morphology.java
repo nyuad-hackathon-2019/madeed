@@ -6,9 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Morphology {
-
-    ResultsAdapter.MadeedResultType type = ResultsAdapter.MadeedResultType.MORPHOLOGY;
+class Morphology {
 
     String entryAr;
     String entryArNormalized;
@@ -20,7 +18,7 @@ public class Morphology {
 
 
 
-    public Morphology(String entryAr, String entryArNormalized, String dataSourceEn, String dataSourceAr, String locale, String pos, String morphology) {
+    private Morphology(String entryAr, String entryArNormalized, String dataSourceEn, String dataSourceAr, String locale, String pos, String morphology) {
         this.entryAr = entryAr;
         this.entryArNormalized = entryArNormalized;
         this.dataSourceEn = dataSourceEn;
@@ -49,6 +47,7 @@ public class Morphology {
         } catch (JSONException e) {
             Log.e("Madeed", "error", e);
         }
+        return null;
     }
 
 

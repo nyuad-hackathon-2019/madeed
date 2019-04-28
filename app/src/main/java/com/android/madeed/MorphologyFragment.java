@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class OntologyFragment extends BaseFragment {
+public class MorphologyFragment extends BaseFragment {
 
     @Override
     ResultsAdapter createAdapter() {
