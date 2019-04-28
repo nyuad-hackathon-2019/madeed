@@ -34,11 +34,11 @@ public class ShowResults extends AppCompatActivity {
         setUpViewPager(getIntent().getStringExtra(MainActivity.POSITION_MESSAGE));
     }
 
-    private void setUpViewPager(final String query ) {
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+    private void setUpViewPager(final String query) {
+        viewPager = findViewById(R.id.viewPager);
         myPagerAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
 
@@ -49,7 +49,6 @@ public class ShowResults extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition(), true);
 
             }
 
@@ -59,4 +58,6 @@ public class ShowResults extends AppCompatActivity {
             }
         });
     }
+
+
 }

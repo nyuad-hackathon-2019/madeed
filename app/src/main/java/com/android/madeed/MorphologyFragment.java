@@ -1,31 +1,33 @@
 package com.android.madeed;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-public class DictionaryFragment extends BaseFragment  {
 
-    ResultsAdapter resultsAdapter;
+public class MorphologyFragment extends BaseFragment {
+
+    private MorphologyAdapter morphologyAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
         View root =  inflater.inflate(R.layout.fragment_dictionary, container, false);
         mRecyclerView = root.findViewById(R.id.recycler_view);
-        resultsAdapter = createAdapter();
+        morphologyAdapter = new MorphologyAdapter();
         LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(resultsAdapter);
+        mRecyclerView.setAdapter(morphologyAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
@@ -34,16 +36,14 @@ public class DictionaryFragment extends BaseFragment  {
     }
 
 
-    ResultsAdapter createAdapter() {
-        return new ResultsAdapter();
-    }
-
-    void load(String query) {
-        MadeedApi.getInstance(MadeedApp.getContext()).define(query, this);
+    @Override
+    void load(String phrase) {
+        Log.e("Madeed" , "loading morphologies: " + phrase);
+        MadeedApi.getInstance(MadeedApp.getContext()).morphologies(phrase, this);
     }
 
     @Override
-    public void onTermDefinitionComplete(String originalTerm, List<DictionaryResult> dictionaryResults) {
-        resultsAdapter.setDictResults(dictionaryResults);
+    public void onMorphologyRequestComplete(String originalTerm, List<Morphology> dictionaryResults) {
+        morphologyAdapter.setMorphResults(dictionaryResults);
     }
 }

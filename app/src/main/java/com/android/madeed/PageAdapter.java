@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TITLES = new String[] {"Dictionary", "Ontology", "Morphology"};
+    private static final String[] TITLES = new String[] {"Dictionary", "Morphology"};
 
-    private Fragment[] fragments = new Fragment[3];
+    private Fragment[] fragments = new Fragment[TITLES.length];
 
     public PageAdapter(FragmentManager fm) {
         super(fm);
@@ -25,14 +25,9 @@ public class PageAdapter extends FragmentPagerAdapter {
                 return fragments[0];
             case 1:
                 if (fragments[1] == null) {
-                    fragments[1] =  new OntologyFragment();
+                    fragments[1] =  new MorphologyFragment();
                 }
                 return fragments[1];
-            case 2:
-                if (fragments[2] == null) {
-                    fragments[2] =  new Tab3();
-                }
-                return fragments[2];
             default:
                 return null;
         }

@@ -2,77 +2,107 @@ package com.android.madeed;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
-class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.WordViewHolder> {
+import static android.view.View.GONE;
 
-    private List<Word> words;
+class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolder> {
+
+
+    private List<DictionaryResult> dictionaryResults;
+
 
     ResultsAdapter() {}
 
-    void setData(List<Word> words) {
-        this.words = words;
+    void setDictResults(List<DictionaryResult> dictionaryResults) {
+        this.dictionaryResults = dictionaryResults;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.result, parent, false);
-        return new WordViewHolder(itemView);
+    public ResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = null;
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.dictionary_result, parent, false);
+        return new ResultViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
-        holder.bind(words.get(position));
+    public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
+            holder.bind(dictionaryResults.get(position), null);
     }
 
     @Override
     public int getItemCount() {
-        return words == null ? 0 : words.size();
+        return dictionaryResults == null ? 0 : dictionaryResults.size();
     }
 
-    static class WordViewHolder extends RecyclerView.ViewHolder {
+    static class ResultViewHolder extends RecyclerView.ViewHolder {
 
+        // DictionaryResult Data fields only
         private TextView original;
         private TextView definition;
         private TextView source;
         private TextView synonyms;
+        private ImageView speaker;
+
+
         private MadeedApp madeedApp;
 
-        WordViewHolder(View view) {
+        ResultViewHolder(View view) {
             super(view);
-            original = (TextView) view.findViewById(R.id.original);
-            definition = (TextView) view.findViewById(R.id.definition);
-            source = (TextView) view.findViewById(R.id.source);
-            synonyms = (TextView) view.findViewById(R.id.synonyms);
+                original =  view.findViewById(R.id.original);
+                definition = view.findViewById(R.id.definition);
+                source =  view.findViewById(R.id.source);
+                synonyms =  view.findViewById(R.id.synonyms);
+                speaker = view.findViewById(R.id.speaker);
         }
 
-        void bind(final Word w) {
-            original.setText(w.synSet + " " + w.definition);
-            definition.setText(w.getDefinition());
-            source.setText(w.getSource());
-//            synonyms.setText(w.synonyms.toString());
+        void bind(final DictionaryResult d, final Morphology m) {
+            if (d != null) {
 
-            this.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final MadeedApi madeedApi = madeedApp.getApi(view.getContext());
-                    if (w.isDefinition()) {
-                        madeedApi.texttospeech(w.getDefinition(), "en");
-                    } else { // includes isTranslation and others
-                        madeedApi.texttospeech(w.original, "ar");
+                // turn on dict results
+                original.setVisibility(View.VISIBLE);
+                definition.setVisibility(View.VISIBLE);
+                source.setVisibility(View.VISIBLE);
+                synonyms.setVisibility(View.VISIBLE);
+                speaker.setVisibility(View.VISIBLE);
+
+
+                original.setText(d.synSet + " " + d.definition);
+                definition.setText(d.getDefinition());
+                source.setText(d.getSource());
+
+                this.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final MadeedApi madeedApi = madeedApp.getApi(MadeedApp.getContext());
+                        if (d.isDefinition()) {
+                            madeedApi.texttospeech(d.getDefinition(), "en");
+                        } else { // includes isTranslation and others
+                            madeedApi.texttospeech(d.original, "ar");
+                        }
                     }
-                }
-            });
+                });
+            } else if (m != null) {
+
+                // turn off the dictionary views
+                original.setVisibility(GONE);
+                definition.setVisibility(GONE);
+                source.setVisibility(GONE);
+                synonyms.setVisibility(GONE);
+                speaker.setVisibility(GONE);
+
+            } else {
+                throw new IllegalArgumentException("both Dictionaryresult and morphology were null. how? ");
+            }
         }
     }
 }
