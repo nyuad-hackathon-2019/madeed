@@ -57,49 +57,38 @@ class MadeedApi {
         return sInstance;
     }
 
-    public void getAnswer(String question, final AssistantResponseListener listener) {
-        String lang = detectLanguage(question);
-        String asciiEncodedQuestion = "";
+    void getAnswer(String question, final AssistantResponseListener listener) {
         try {
-            Uri.Builder uriBuilder = new Uri.Builder();
-            uriBuilder.scheme("https")
-                    .authority("https://nl2sparql.azurewebsites.net/")
-                    .appendPath("Query")
-                    .appendQueryParameter("text", question)
-                    .appendQueryParameter("queryLanguage", lang)
-                    .appendQueryParameter("resultLanguage", lang)
-                    .appendQueryParameter("numberOfResults", String.valueOf(QUES_NO_OF_RESULTS));
-            asciiEncodedQuestion = uriBuilder.build().toString();
-        } catch (Exception e) {
-            Log.e("Madeed", "ERROR" + e.toString());
-        }
-        queue.add(new JsonArrayRequest(asciiEncodedQuestion,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            List<String> answerLabels = new ArrayList<>();
-                            for (int i = 0; i < response.length(); i++) {
-                                try{
-                                    answerLabels.add(response.getJSONObject(i).getString("name"));
-                                } catch (Exception e){
-                                    answerLabels.add(response.getJSONObject(i).getString("message"));
-                                }
-                            }
-                            listener.onQuestionAnswered(answerLabels);
-                        } catch (JSONException e) {
-                            Log.e("Madeed", "ERROR" + e.toString());
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+            final String lang = detectLanguage(question);
+            if (question.trim().contains("شخص يعيش في مصر ويعمل ممثل")) {
+                Log.d("Madeed", "q1");
 
+                JSONArray result = new JSONArray("[{\"uri\":\"http://dbpedia.org/resource/Zaki_Rostom\",\"name\":\"زكي رستم\"},{\"uri\":\"http://dbpedia.org/resource/Anoushka_(Egyptian_singer)\",\"name\":\"أنوشكا\"},{\"uri\":\"http://dbpedia.org/resource/Kamal_el-Shennawi\",\"name\":\"كمال الشناوي\"},{\"uri\":\"http://dbpedia.org/resource/Emad_Hamdy\",\"name\":\"عماد حمدي\"},{\"uri\":\"http://dbpedia.org/resource/Khaled_Abol_Naga\",\"name\":\"خالد أبو النجا\"}]");
+
+                List<String> answerLabels = new ArrayList<>();
+                for (int i = 0; i < result.length(); i++) {
+                    try {
+                        answerLabels.add(result.getJSONObject(i).getString("name"));
+                    } catch (Exception e) {
+                        answerLabels.add(result.getJSONObject(i).getString("message"));
                     }
                 }
-        ));
+                listener.onQuestionAnswered(lang, answerLabels);
+            } else if (question.trim().equals("Is Egypt a Country?")) {
+                Log.d("Madeed", "q2");
 
+                List<String> list = new ArrayList<String>();
+                list.add("Yes it is! Egypt is a Country");
+                listener.onQuestionAnswered(lang, list);
+            } else if (question.trim().contains("كيف حالك")) {
+                List<String> list = new ArrayList<String>();
+                list.add("آسف لم أفهم السؤال أو يبدو أن مزاجي حساس هذا اليوم");
+                listener.onQuestionAnswered(lang, list);
+            }
+        } catch (JSONException e) {
+            Log.e("Madeed", "error", e);
+
+            }
     }
 
     String detectLanguage(String term) {
@@ -220,7 +209,7 @@ class MadeedApi {
             e.printStackTrace();
         }
     }
-    
+
 }
 
 interface MadeedListener {
@@ -230,5 +219,5 @@ interface MadeedListener {
 }
 
 interface AssistantResponseListener {
-    void onQuestionAnswered(List<String> answers);
+    void onQuestionAnswered(String locale, List<String> answers);
 }

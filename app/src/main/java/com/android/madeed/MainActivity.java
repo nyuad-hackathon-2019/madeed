@@ -1,5 +1,6 @@
 package com.android.madeed;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -22,7 +23,8 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MadeedListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements
+        MadeedListener, NavigationView.OnNavigationItemSelectedListener, AssistantResponseListener {
 
     public static final String POSITION_MESSAGE = "com.android.madeed.POSITION";
 
@@ -75,9 +77,10 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.equals("س")) {
-                    Toast.makeText(MainActivity.this, "happen", Toast.LENGTH_SHORT).show();
-                    searchView.setQuery("", false);
+                if (query.startsWith("س:") || query.startsWith("s:")) {
+                    String actual= query.substring(2);
+                    Toast.makeText(MainActivity.this, "querying...", Toast.LENGTH_SHORT).show();
+                    MadeedApi.getInstance(MadeedApp.getContext()).getAnswer(actual, MainActivity.this);
                     return false;
                 }
                 madeedApi.suggestions(query, MainActivity.this);
@@ -152,6 +155,28 @@ public class MainActivity extends AppCompatActivity implements MadeedListener, N
             searchView.setQuery(query, false);
             Log.d("Madeed", query);
         }
+    }
+
+    @Override
+    public void onQuestionAnswered(String lang, List<String> answers) {
+        String result = "";
+
+
+        for (int i = 0; i < answers.size() ; i++) {
+            result += answers.get(i);
+            if (lang.equals("ar")) {
+                if (i != answers.size() - 1) {
+                    result += ", و";
+                }
+            }
+            else {
+                if (i != answers.size() - 1) {
+                    result += ", and";
+                }
+            }
+        }
+        Log.d("Madeed", "question result: " + result);
+        MadeedApp.getApi(MadeedApp.getContext()).texttospeech(result, lang);
     }
 }
 
